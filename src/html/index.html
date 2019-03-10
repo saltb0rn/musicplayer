@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+        <script type="text/x-mustache" id="playing-template">
+         /* TODO: 加入模板 */
+        </script>
+        <script type="text/html" id="song-template">
+            {{#playlist}}
+            <li class="song">
+                <div class="album-cover">
+                    <img data-src={{cover}} alt="cover-{{id}}" data-id={{id}} />
+                </div>
+                <div class="song-infos">
+                    <h2 class="song-name">{{name}}</h2>
+                    <sub class="artist">{{artist}}</sub>
+                </div>
+                <div class="like">like</div>
+            </li>
+            {{/playlist}}
+        </script>
+    </head>
+    <body>
+        <!-- 首页 -->
+        <section id="index-page" class="page">
+            <header class="banner">
+                <section class="title">
+                    <ul>
+                        <li><i class="icon icon-cog"></i></li>
+                        <li>Music Player</li>
+                        <li><i class="icon icon-user"></i></li>
+                    </ul>
+                </section>
+                <section class="search-bar">
+                    <div class="wrapper">
+                        <input id="search" type="search" placeholder="Search music" />
+                        <button class="icon" title="search">Search</button>
+                    </div>
+                </section>
+                <section class="button-links">
+                    <ul>
+                        <li class="btn-link active" id="music">歌曲列表</li>
+                        <li class="btn-link" id="fav">我的最爱</li>
+                        <li class="btn-link" id="result">搜索结果</li>
+                    </ul>
+                </section>
+            </header>
+            <main class="index">
+                <section class="playlist">
+                    <ul class="wrapper"></ul>
+                </section>
+                <section class="status-bar">
+                </section>
+            </main>
+            <footer>
+            </footer>
+        </section>
+
+        <!-- 首页 end -->
+        <!-- 播放页 -->
+
+        <section id="playing-page" class="page hidden">
+            
+            <header class="banner scale">
+                <section class="title">
+                    <ul>
+                        <li><i class="icon icon-cog"></i></li>
+                        <li>Music Player</li>
+                        <li><i class="icon icon-user"></i></li>
+                    </ul>
+                </section>
+            </header>
+            <main class="playing">
+                <section class="control">
+                    <!-- 音量条高 10%  -->
+                    <div class="volume">
+                        <div class="wrapper">
+                            <i class="volume-down"></i>
+                            <div class="volume-bar">
+                                <div class="wrapper">
+                                    <div class="volume-value">
+                                        <div class="volume-btn">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <i class="volume-up"></i>
+                        </div>
+                    </div>
+
+                    <!-- 封面 50% -->
+                    <div class="cover">
+                        <div>
+                            <img src="../cover/cover.png" alt="cover" class="span">
+                        </div>
+                    </div>
+
+                    <!-- 控制版面 40% -->
+                    <div class="panel">
+                        <!-- 歌曲信息 -->
+                        <div class="info">
+                            <ul>
+                                <li>曲名</li>
+                                <li>歌手</li>
+                            </ul>
+                        </div>
+
+                        <!-- 进度条 -->
+                        <div class="progress">
+                            <div class="wrapper">
+                                <div class="progress-value">
+                                    <div class="progress-btn"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 歌曲时间 -->
+                        <div class="music-time">
+                            <ul>
+                                <li>0:00</li>
+                                <li>4:50</li>
+                            </ul>
+                        </div>
+
+                        <!-- 控制面板 -->
+                        <div class="playing-control">
+                            <ul>
+                                <li>
+                                    <img class="prev" src="../img/pre.png" />
+                                </li>
+                                <li>
+                                    <img class="pause" src="../img/pause.png" />
+                                    <img class="play hidden" src="../img/play.png" />
+                                </li>
+                                <li>
+                                    <img class="next" src="../img/next.png" />
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- 播放模式 -->
+                        <!-- <div class="playing-mode">
+                             <ul>
+                             <li>
+                             <i class="order-loop"></i>
+                             </li>
+                             <li>
+                             <i class="random"></i>
+                             </li>
+                             <li>
+                             <i class="single-loop"></i>
+                             </li>
+                             </ul>
+                             </div> -->
+                        
+                        
+                    </div>
+
+                    
+                </section>
+            </main>
+            <footer>
+            </footer>
+        </section>
+        <!-- 播放页 end -->
+    </body>
+</html>
