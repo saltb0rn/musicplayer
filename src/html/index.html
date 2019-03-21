@@ -10,13 +10,26 @@
             {{#playlist}}
             <li class="song">
                 <div class="album-cover">
-                    <img data-src={{cover}} alt="cover-{{id}}" data-id={{id}} />
+                    <img alt="cover-{{id}}"
+                         data-cover={{cover}}
+                         data-id={{id}}
+                         data-name="{{name}}"
+                         data-artist="{{artist}}"
+                         data-file="{{file}}"
+                         class="mcover" />
                 </div>
                 <div class="song-infos">
                     <h2 class="song-name">{{name}}</h2>
                     <sub class="artist">{{artist}}</sub>
                 </div>
-                <div class="like">like</div>
+                <div class="like">
+                    <i class="icon icon-like"
+                       data-id="{{id}}"
+                       data-cover="{{cover}}"
+                       data-name="{{name}}"
+                       data-file="{{file}}"
+                       data-artist="{{artist}}">
+                    </i></div>
             </li>
             {{/playlist}}
         </script>
@@ -47,11 +60,27 @@
                 </section>
             </header>
             <main class="index">
-                <section class="playlist">
-                    <ul class="wrapper"></ul>
-                </section>
-                <section class="status-bar">
-                </section>
+                <div class="music">
+                    <section class="playlist">
+                        <ul class="wrapper" id="music-content"></ul>
+                    </section>
+                    <section class="status-bar" data-tag="music-content">
+                    </section>
+                </div>
+                <div class="fav hidden">
+                    <section class="playlist">
+                        <ul class="wrapper" id="fav-content"></ul>
+                    </section>
+                    <section class="status-bar" data-tag="fav-content">
+                    </section>
+                </div>
+                <div class="result hidden">
+                    <section class="playlist">
+                        <ul class="wrapper" id="result-content"></ul>
+                    </section>
+                    <section class="status-bar" data-tag="result-content">
+                    </section>
+                </div>
             </main>
             <footer>
             </footer>
@@ -61,11 +90,11 @@
         <!-- 播放页 -->
 
         <section id="playing-page" class="page hidden">
-            
+
             <header class="banner scale">
                 <section class="title">
                     <ul>
-                        <li><i class="icon icon-cog"></i></li>
+                        <li><i class="icon icon-back"></i></li>
                         <li>Music Player</li>
                         <li><i class="icon icon-user"></i></li>
                     </ul>
@@ -78,12 +107,7 @@
                         <div class="wrapper">
                             <i class="volume-down"></i>
                             <div class="volume-bar">
-                                <div class="wrapper">
-                                    <div class="volume-value">
-                                        <div class="volume-btn">
-                                        </div>
-                                    </div>
-                                </div>
+                                <input type="range" min="0" max="2" name="volume" step="0.01" />
                             </div>
                             <i class="volume-up"></i>
                         </div>
@@ -92,7 +116,7 @@
                     <!-- 封面 50% -->
                     <div class="cover">
                         <div>
-                            <img src="../cover/cover.png" alt="cover" class="span">
+                            <img src="../cover/cover.png" alt="cover" class="spin">
                         </div>
                     </div>
 
@@ -101,16 +125,16 @@
                         <!-- 歌曲信息 -->
                         <div class="info">
                             <ul>
-                                <li>曲名</li>
-                                <li>歌手</li>
+                                <li id="playing-name">曲名</li>
+                                <li id="playing-artist">歌手</li>
                             </ul>
                         </div>
 
                         <!-- 进度条 -->
                         <div class="progress">
                             <div class="wrapper">
-                                <div class="progress-value">
-                                    <div class="progress-btn"></div>
+                                <div class="progress-bar">
+                                    <input type="range" min="0" name="progress" />
                                 </div>
                             </div>
                         </div>
@@ -119,7 +143,7 @@
                         <div class="music-time">
                             <ul>
                                 <li>0:00</li>
-                                <li>4:50</li>
+                                <li id="music-end">4:50</li>
                             </ul>
                         </div>
 
@@ -153,11 +177,11 @@
                              </li>
                              </ul>
                              </div> -->
-                        
-                        
+
+
                     </div>
 
-                    
+
                 </section>
             </main>
             <footer>

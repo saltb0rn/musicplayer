@@ -6,12 +6,51 @@ const noProxy = process.env.NO_PROXY === 'true';
 
 const proxy = {
   // Priority processing.
-  _proxy: {
-    proxy: {
-      '/repos/*': 'https://api.github.com/',
-    },
-    changeHost: true,
+  // _proxy: {
+  //   proxy: {
+  //     '/repos/*': 'https://api.github.com/',
+  //   },
+  //   changeHost: true,
+    // },
+  'GET /api/music/:from/limit/:limit': (req, res) => {
+      const { from, limit } = req.params;
+      console.log(`start from ${from}`);
+      return res.json({
+          playlist: [
+              {
+                  id: from,
+                  cover: "/path/to/1.png",
+                  name: 'Tohou',
+                  artist: `${from}L`
+              },
+              {
+                  id: from + 1,
+                  cover: "/path/to/2.png",
+                  name: 'Tohou',
+                  artist: `${from+1}L`
+              },
+              {
+                  id: from + 2,
+                  cover: "/path/to/2.png",
+                  name: 'Tohou',
+                  artist: `${from+2}L`
+              },
+              {
+                  id: from + 3,
+                  cover: "/path/to/2.png",
+                  name: 'Tohou',
+                  artist: `${from+3}L`
+              },
+              {
+                  id: from + 4,
+                  cover: "/path/to/2.png",
+                  name: 'Tohou',
+                  artist: `${from+4}L`
+              }
+          ]
+      });
   },
+    
   'GET /api/userinfo/:id': (req, res) => {
       console.log('-1--->', req.params);
     return res.json({
@@ -33,6 +72,8 @@ const proxy = {
       path: req.params[0]
     });
   },
+
+
   'GET /api/user/list/:id/:type': (req, res) => {
     const { type } = req.params;
     if (type === 'webpack') {
@@ -53,6 +94,7 @@ const proxy = {
       }
     ]);
   },
+
   'GET /repos/hello': (req, res) => {
       console.log('/repos/hello:=>>>', req.params);
     return res.json({
@@ -98,5 +140,5 @@ const proxy = {
     res.send({ status: 'ok', message: '删除成功！' });
   }
 }
-module.exports = (noProxy ? {} : delay(proxy, 1000));
-// module.exports = proxy;
+// module.exports = (noProxy ? {} : delay(proxy, 1000));
+module.exports = proxy;

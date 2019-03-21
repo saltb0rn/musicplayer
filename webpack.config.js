@@ -70,12 +70,18 @@ var devServer = {
     inline: true,
     index: "/html/index.html",
     hot: true,
+    port: 80, // may need permission to use port 80
     // historyApiFallback: {
     //     index: "/html/index.html",
     // }
 };
 
-function moduleProxy(fileInlined=true, imgPublicPath='/img', fontPublicPath='/font'){
+function moduleProxy(
+    fileInlined=true, publicPaths={
+        imgPublicPath: '/img',
+        fontPublicPath: '/font',
+        audioPublicPath: '/audio'
+    }){
     var module = {
         rules: [
             {
@@ -102,6 +108,9 @@ function moduleProxy(fileInlined=true, imgPublicPath='/img', fontPublicPath='/fo
                                 },
                             ],
                         ],
+                        plugins: [
+                            ['@babel/plugin-proposal-decorators', {"legacy": true}]
+                        ]
                     },
                 },
             },
@@ -130,10 +139,25 @@ function moduleProxy(fileInlined=true, imgPublicPath='/img', fontPublicPath='/fo
                             outputPath: Path.relative(
                                 Path.resolve(__dirname, DIST),
                                 Path.resolve(__dirname, DIST, 'img')),
-                            publicPath: imgPublicPath,
+                            publicPath: publicPaths.imgPublicPath,
                             name: '[name].[ext]?[hash]',
                         }
                     },
+                ]
+            },
+            {
+                test: /\.mp3$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            outputPath: Path.relative(
+                                Path.resolve(__dirname, DIST),
+                                Path.resolve(__dirname, DIST, 'audio')),
+                            publicPath: publicPaths.audioPublicPath,
+                            name: '[name].[ext]?[hash]'
+                        }
+                    }
                 ]
             },
             {
@@ -145,7 +169,7 @@ function moduleProxy(fileInlined=true, imgPublicPath='/img', fontPublicPath='/fo
                             outputPath: Path.relative(
                                 Path.resolve(__dirname, DIST),
                                 Path.resolve(__dirname, DIST, 'font')),
-                            publicPath: fontPublicPath,
+                            publicPath: publicPaths.fontPublicPath,
                             name: '[name].[ext]?[hash]'
                         }
                     }
@@ -156,7 +180,8 @@ function moduleProxy(fileInlined=true, imgPublicPath='/img', fontPublicPath='/fo
                 use: {
                     loader: 'html-loader',
                     options: {
-                        attrs: ['img:src'] // no need to import images in js files any more
+                        attrs: [':src', ':data-src'],
+                        // attrs: ['img:src', 'audio:src', 'source:src'] // no need to import images in js files any more
                     }
                 }
             },
@@ -198,14 +223,33 @@ MODULE.exports = function(env, argv) {
 
     if (forwhat === FORDEV) {
 
-        module = moduleProxy(fileInlined=true, "/img", '/font');
+        module = moduleProxy(
+            fileInlined=true,
+            {
+                imgPublicPath: "/img",
+                fontPublicPath: '/font',
+                audioPublicPath: '/audio'
+            });
         output.publicPath = '/';
     }
     else if (forwhat === FORSTAIC){
-        module = moduleProxy(fileInlined=false, "../img", '../font');
+        module = moduleProxy(
+            fileInlined=false,
+            {
+                imgPublicPath: "../img",
+                fontPublicPath: '../font',
+                audioPublicPath: '../audio'
+            }            
+        );
     }
     else if (forwhat === FORBACKEND){
-        module = moduleProxy(fileInlined=false, "/img", '/font');
+        module = moduleProxy(
+            fileInlined=false,
+            {
+                imgPublicPath: "/img",
+                fontPublicPath: '/font',
+                audioPublicPath: '/audio'
+            });
         output.publicPath = '/';
     }
 
@@ -274,5 +318,12 @@ confHtmlPage(
             chunks: ['index'],
             template: 'index.html',
         },
+
+        {
+            inject: true,
+            filename: 'test.html',
+            chunks: ['test'],
+            template: 'test.html'
+        }
     ]
 );
