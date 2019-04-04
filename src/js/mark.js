@@ -30,9 +30,7 @@ var MusicManager = (function() {
 
         addMusic: function(music) {
 
-            if(storageAvailable('localStorage') &&
-               typeof music.id == 'number' &&
-               music.id % 1 === 0) {
+            if(storageAvailable('localStorage')) {
                 if(!this.isSaved(music)) {
                     favMusic.push(music);
                     localStorage.setItem('favMusic', JSON.stringify({
@@ -44,9 +42,7 @@ var MusicManager = (function() {
         },
 
         removeMusic: function(music) {
-            if(storageAvailable('localStorage') &&
-               typeof music.id == 'number' &&
-               music.id % 1 === 0) {
+            if(storageAvailable('localStorage')) {
                 if (this.isSaved(music)) {
                     favMusic = favMusic.filter(obj => music.id != obj.id);
                     localStorage.setItem('favMusic', JSON.stringify({

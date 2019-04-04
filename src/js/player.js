@@ -1,4 +1,4 @@
-function musicSelectedRequired(target, name, descriptor) {
+export function musicSelectedRequired(target, name, descriptor) {
     const wrapped = descriptor.value;
     if (typeof wrapped === 'function')
         descriptor.value = function(...args) {

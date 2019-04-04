@@ -1,38 +1,107 @@
-*** Requirements
+*** 说明
 
-    The *latest* (not stable) =nodejs= and =npm= version, and Debian-based system.
+    这只是一个很单纯的练手项目,其实这个项目还有很多东西没有完善,但是都不是技术难题,纯粹是因为代码改起来会比较麻烦,并且不想花太多时间在这上面,所以就点到为止.
 
+    这个项目的设计是参考[[https://github.com/alex1504/jquery-mobile-player][这个]]的(当然代码除了一些 =CSS= 就没参考过了),当然是有些不同,比如我没有使用 =JQuery=,其实现在 =JQuery= 快要被淘汰了,原生 =JavaScript= 已经足够好用了(这是一件好事),所以我就直接采用原生 =JavaScript= 开发,况且现在大部份都是通过框架开发,几乎很少直接操作 =DOM=.
 
-*** Problems you may have
+    除了使用的依赖不太一样以外,因为手工对歌词数据的处理有点繁琐,我放弃歌词功能.
 
-    There will be a permission problem while running =npm run init=, it's possible because of =node-sass= and can't be solved by simply adding =sudo=.
+    由于歌曲文件会比较大,所以我就用 =Python= 临时写了一个简单的接口服务来提供这些资源,因为后端的源代码很简单所以就不上传到这里了.
 
-    To solve this, you can check [[https://github.com/sass/node-sass/issues/2404][this]] out, =sudo npm install --unsafe-perm node-sass= probably works most of the times.
-
-    If that is the problem I am talking about, you can fix it by editing the =package.json= manually.
-
-    And the another possible problem is the version problem, like I said, make sure you do meet the requirements.
+    还有这个项目写得不是太好,并且在 =Webpack= 的辅助下使用了很多 =JavaScript= 的新语法,所以个人不推荐初学者阅读这份代码,如我说的,这只是练手项目,是用来熟悉开发的,可能会有一些小 =bugs= 我没有发现,我会之后检查并且修复.
 
 
-*** Usage
+*** 技术细节
 
-    The directory =webpack= is the template of the initialize project. If you want to create a new project just copy it to the location you want and edit the =package.json= according the =.package.json.tpl=.
+**** 项目依赖
 
-    Emacs as my main editor, I create a command =create-webpack-project= to do these works for me.
-
-    - =npm run init=: install all the dependencies.
-
-    - =build command=: there are three build commands for there different conditions, their differences are all about =URIs= of sources.
-
-      - =build:static=: built for static site.
-
-      - =build:dev=: built for development.
-
-      - =build:backend=: built for backend development.
-
-    - =npm run dev=: for development, supporting live editing, hot reload and mocker.
+     - =lazysizes.js=: 一个图片(不限于图片)懒加载库,使用十分简单
+     - =mustache.js=: 一个轻量的模板库,用来做数据渲染, =handlebar= 就是基于这个开发的.
+     - =iconfont= 图标
 
 
-*** Change logs
+**** 使用到的技术
 
-    - 2019/2/13 Dependence =webpack-api-mocker= renamed to =mocker-api=, so I changed it, too. Otherwise, there will be a bug.
+     - =Viewport= 单位: 实现自适应布局,淘宝的 =flexible.js= 目的就是模拟这类单位(基本不再需要这个库了,并且该项目也很久没更新了).
+     - =LocalStorage API=: 浏览器的本地储存功能,可以用它来替代 =Cookies=,这里我用来保存用户喜欢的歌曲.
+     - =WEB Audio API=: 浏览器的音频接口,用来实现歌曲播放以及播放控制功能.
+     - =Fetch API=: 新一代的请求功能,用来请求数据(用起来很舒服).
+     - =Webpack=: 编译 =JavaScript=,因为项目使用了不少的新语法;项目构建和打包.
+
+
+**** 所实现的功能
+
+     - 音乐播放/暂停/上一首/下一首功能/顺序播放
+     - 音乐收藏功能
+
+     事实上,由于某些原因这些功能会有一些问题,但都不是技术难点,比如上一首的功能,我只实现了真的只播放"上一首",也就是说播放 =A= 再播放 =B=,选择播放上一首的时候会是 =A=,但如果再次选择播放上一首,那么就是 =B=.
+
+     这里可以通过使用一个类似于 =stack= 的东西来按顺记录每次的播放记录,然后播放上一首就是 =pop=,我之所以没这么做那是因为这块功能交给后端来做更加适合(不只是播放上一首,事实上顺序播放,随机播放等等最好由后端负责).
+
+     这个项目的主页面有三个列表,当时实际上只认真开发了其中一个,由于项目开始的时候没有注意到要把三个列表分开开发,后面注意到的是时候已经晚了,所以就没对代码进行修改.
+
+
+**** 过程中遇到的一些的问题
+
+     只有解决遇到问题你才能学到东西.
+
+     - 滚动条(=scrollbar=): 元素的总宽度里面是包含滚动条的宽度或者高度的,所以它的重新会影响布局,目前我还没找到使用 =JavaScript= 根据滚动条占的距离来设置元素的 =margin= 以外的解决办法.
+
+       代码实现思路如下:
+
+       #+BEGIN_SRC javascript
+       function getScrollbarWidth(element) {
+           // 可以了解一下 offsetWidth, clientWidth 以及滚动条宽这3者的关系
+           return element.offsetWidth - element.clientWidth;
+       }
+
+       // 比如要在发生 resize 时候修改 .song 的元素
+       window.addEventListener('resize', function() {
+           // 目前找到比较简单的修改 .song 样式方法就是在页面插入一个 .song 样式
+           var style = document.getElementById("altered-css"),
+               main = document.querySelector('main');
+               // main 为可滚动元素,这是我们的适配目标
+           if (style) {
+               // 由于发生 resize 事情的时候滚动条的宽度是会改变的,所以要刷新样式
+               style.parentNode.removeChild(style);
+           }
+           style = document.createElement('style');
+           style.type = 'text/css';
+           style.id = "altered-css";
+           style.innerHTML = `.song {margin-left: ${getScrollbarWidth(main)}px`;
+           document.head.appendChild(style);
+       }, false);
+       #+END_SRC
+
+     - 音频资源跨域请求以及自动播放问题: =Audio= 对象请求(接受跨域请求的)音频资源的如果不设置 =crossOrigin= 属性虽然也可以成功播放,但是会强制静音.
+
+       其次还有一个浏览器的权限问题,用 =JavaScript= 自动调用 =play= 方法的话会被浏览器拦截, =play= 方法的调用必须经由用户的动作触发才能成功.
+
+     - 获取音频文件的时间长度: 有一个奇怪的现象就是 =Audio= 对象的 =duration= 属性有时候会获取不到音频长度的,不过 =Audio= 有 =loadedmetadata= 事件,可以在回调里面通过 =this.duration= 获取时间长度.
+
+     - 判断元素是否可以滚动: 不能滚动的元素的 =scrollTop= (not read only)属性是必定为 =0= 的,给它赋一个整数值,然后再观察它的值,如果还是 =0= 那么就是不能滚动,
+
+       #+BEGIN_SRC javascript
+       function isScrollable(element) {
+           // 保留原来的值,因为元素可能是能滚动的,方便测试之后复位
+           let origin_value = element.scrollTop;
+           if (element.scrollTop > 0) return true;
+           element.scrollTop = 1;
+           // element.scrollTop += 1;
+           // 可以改成这个,这样如果测试的元素可以滚动的话就不会在测试过程中发生大动作
+           if (element.scrollTop == 1) {
+               element.scrollTop = origin_value;
+               return true;
+           }
+           return false;
+       }
+       #+END_SRC
+
+
+**** 一些遗憾
+
+     第一次完成一个比较完整的 =demo=,这个 =demo= 暴露出了自己很多的问题,这反映在项目的结构上以及代码的组织上,其实这个项目我已经砍了很多想要实现的东西了.
+
+     比如自己写一个前端路由,由于成品不好用而且还有一些 =bugs=,所以前端路由我就放弃了,所以这次也没有做成 =SPA= 的形式,这是我最大的一个遗憾.
+
+     不过我打算这段时间内学习一下再来写一个.

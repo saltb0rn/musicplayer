@@ -8,28 +8,26 @@
         </script>
         <script type="text/html" id="song-template">
             {{#playlist}}
-            <li class="song">
+            <li class="song"
+                data-id="{{id}}"
+                data-cover={{cover}}
+                data-name="{{name}}"
+                data-artist="{{artist}}"
+                data-file="{{file}}">
                 <div class="album-cover">
-                    <img alt="cover-{{id}}"
-                         data-cover={{cover}}
-                         data-id={{id}}
-                         data-name="{{name}}"
-                         data-artist="{{artist}}"
-                         data-file="{{file}}"
-                         class="mcover" />
+                    <img alt="{{cover}}"
+                         class="mcover lazyload"
+                         data-sizes="auto"
+                         data-src={{cover}}
+                    />
                 </div>
                 <div class="song-infos">
                     <h2 class="song-name">{{name}}</h2>
                     <sub class="artist">{{artist}}</sub>
                 </div>
                 <div class="like">
-                    <i class="icon icon-like"
-                       data-id="{{id}}"
-                       data-cover="{{cover}}"
-                       data-name="{{name}}"
-                       data-file="{{file}}"
-                       data-artist="{{artist}}">
-                    </i></div>
+                    <i class="icon icon-like"></i>
+                </div>
             </li>
             {{/playlist}}
         </script>
@@ -126,7 +124,7 @@
                         <div class="info">
                             <ul>
                                 <li id="playing-name">曲名</li>
-                                <li id="playing-artist">歌手</li>
+                                <li><sub id="playing-artist">歌手</sub></li>
                             </ul>
                         </div>
 
@@ -142,8 +140,8 @@
                         <!-- 歌曲时间 -->
                         <div class="music-time">
                             <ul>
-                                <li>0:00</li>
-                                <li id="music-end">4:50</li>
+                                <li><sub id="music-timestamp">0:00</sub></li>
+                                <li><sub id="music-end">4:50</sub></li>
                             </ul>
                         </div>
 

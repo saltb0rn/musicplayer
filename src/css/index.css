@@ -23,6 +23,8 @@
     --banner-height: 148px;
     --button-link-height: 48px;
     --album-cover-len: calc(2 / 9 * 96vw * 0.75);
+    --track-height: 1.4vh;
+    --thumb-height: calc(var(--track-height) * 2);
 }
 
 .page {
@@ -174,8 +176,6 @@ main.index {
     width: 100vw;
     overflow: hidden scroll;
 }
-
-
 
 /* Playlist */
 .playlist {
@@ -429,17 +429,49 @@ main.playing {
     background-color: #fff;
 }
 
+.pause, .play {
+    height: 14.5vh;
+    width: 14.5vh;
+}
+
+.prev, .next {
+    height: 9.24vh;
+    width: 9.24vh;
+}
+
 /*
 修改 input[type]的轨道高度为父元素高的100%
 */
+input[type="range"] {
+    height: var(--track-height);
+}
+
 input[type="range"]::-moz-range-track {
-    height: 100%;
+    height: var(--track-height);
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
-    height: 100%;
+    height: var(--track-height);
 }
 
 input[type="range"]::-ms-track {
-    height: 100%;
+    height: var(--track-height);
+}
+
+input[type=range]::-webkit-slider-thumb {
+    height: var(--thumb-height);
+    width: var(--thumb-height);
+    border-radius: 50%;
+}
+
+input[type=range]::-moz-range-thumb {
+    height: var(--thumb-height);
+    width: var(--thumb-height);
+    border-radius: 50%;
+}
+
+input[type=range]::-ms-thumb {
+    height: var(--thumb-height);
+    width: var(--thumb-height);
+    border-radius: 50%;
 }

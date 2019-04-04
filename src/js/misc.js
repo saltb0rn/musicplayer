@@ -30,4 +30,8 @@ export function throttle(func, wait, interval) {
     };
 }
 
-// 
+//
+
+export function getScrollbarWidth(element) {
+    return element.offsetWidth - element.clientWidth;
+}
