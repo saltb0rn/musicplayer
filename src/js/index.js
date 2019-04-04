@@ -8,7 +8,7 @@ import { storageAvailable, MusicManager } from "./mark";
 import { MusicPlayer } from "./player";
 import { isScrollable, throttle, getScrollbarWidth } from "./misc";
 
-let musicHost = 'http://localhost:8000',
+let musicHost = 'http://api.darksalt.me/source',
     // getData = (element, attr) => element.dataset[attr];
     lastMusicId = 0,
     getItem = (element, attr) => element.attributes.getNamedItem(attr).value;

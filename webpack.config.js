@@ -318,13 +318,6 @@ confHtmlPage(
             filename: 'index.html',
             chunks: ['index'],
             template: 'index.html',
-        },
-
-        {
-            inject: true,
-            filename: 'test.html',
-            chunks: ['test'],
-            template: 'test.html'
         }
     ]
 );
